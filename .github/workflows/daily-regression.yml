@@ -55,7 +55,7 @@ jobs:
     timeout-minutes: 60
     defaults:
       run:
-        working-directory: Generation
+        working-directory: Generate
 
     steps:
       - uses: actions/checkout@v4
@@ -87,5 +87,5 @@ jobs:
         if: always()
         with:
           name: generation-report-${{ github.run_number }}
-          path: Generation/playwright-report/
+          path: Generate/playwright-report/
           retention-days: 30
