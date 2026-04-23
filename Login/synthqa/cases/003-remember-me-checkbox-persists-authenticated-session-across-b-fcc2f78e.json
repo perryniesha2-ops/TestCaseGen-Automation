@@ -1,0 +1,111 @@
+{
+  "id": "fcc2f78e-5b35-4450-bbaa-e09ddc55e92b",
+  "title": "Remember Me Checkbox Persists Authenticated Session Across Browser Restart",
+  "description": "Verifies that when the 'Remember Me' option is checked during login, the authenticated session persists after the browser is closed and reopened, allowing the user to access protected routes without re-authenticating.",
+  "test_type": "functional",
+  "expected_result": "With 'Remember Me' checked, the user authenticates successfully and is redirected to /dashboard. Re-navigating to /dashboard does not trigger a redirect to /login, confirming the persistent session (long-lived cookie/token) was correctly established and is active.",
+  "test_steps": [
+    {
+      "step_number": 1,
+      "action": "Navigate to the login page",
+      "expected": "Login page is displayed",
+      "selector": "body",
+      "action_type": "navigate",
+      "input_value": "/login",
+      "assertion": {
+        "type": "url",
+        "value": "/login"
+      }
+    },
+    {
+      "step_number": 2,
+      "action": "Enter valid email into the email field",
+      "expected": "Email field contains 'alice.walker@startupco.dev'",
+      "selector": "input[name=\"email\"]",
+      "action_type": "fill",
+      "input_value": "alice.walker@startupco.dev",
+      "assertion": {
+        "type": "value",
+        "value": "alice.walker@startupco.dev"
+      }
+    },
+    {
+      "step_number": 3,
+      "action": "Enter valid password into the password field",
+      "expected": "Password field is populated",
+      "selector": "input[name=\"password\"]",
+      "action_type": "fill",
+      "input_value": "SecurePass123!",
+      "assertion": {
+        "type": "value",
+        "value": "SecurePass123!"
+      }
+    },
+    {
+      "step_number": 4,
+      "action": "Check the 'Remember Me' checkbox",
+      "expected": "Remember Me checkbox is checked",
+      "selector": "[data-testid=\"remember-me-checkbox\"]",
+      "action_type": "check",
+      "assertion": {
+        "type": "checked"
+      }
+    },
+    {
+      "step_number": 5,
+      "action": "Click the Sign In button to authenticate",
+      "expected": "Loading indicator is shown during authentication",
+      "selector": "button[type=\"submit\"]",
+      "action_type": "click",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid=\"loading-indicator\"]"
+      }
+    },
+    {
+      "step_number": 6,
+      "action": "Wait for successful redirect to the dashboard",
+      "expected": "User is redirected to /dashboard after successful authentication",
+      "selector": "body",
+      "action_type": "wait",
+      "assertion": {
+        "type": "url",
+        "value": "/dashboard"
+      }
+    },
+    {
+      "step_number": 7,
+      "action": "Verify the user is shown as authenticated on the dashboard",
+      "expected": "User avatar or display name is visible confirming active session",
+      "selector": "[data-testid=\"user-avatar\"]",
+      "action_type": "wait",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid=\"user-avatar\"]"
+      }
+    },
+    {
+      "step_number": 8,
+      "action": "Navigate directly back to /dashboard to simulate session persistence (cookie check)",
+      "expected": "User remains on /dashboard without being redirected to /login, confirming session persisted",
+      "selector": "body",
+      "action_type": "navigate",
+      "input_value": "/dashboard",
+      "assertion": {
+        "type": "url",
+        "value": "/dashboard"
+      }
+    },
+    {
+      "step_number": 9,
+      "action": "Verify authenticated user indicator is still visible after navigation",
+      "expected": "User avatar remains visible, confirming the session was not lost",
+      "selector": "[data-testid=\"user-avatar\"]",
+      "action_type": "wait",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid=\"user-avatar\"]"
+      }
+    }
+  ]
+}

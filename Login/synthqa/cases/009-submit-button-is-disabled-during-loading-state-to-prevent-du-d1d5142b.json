@@ -1,0 +1,76 @@
+{
+  "id": "d1d5142b-dc00-45a9-a9b8-5402b4f817a1",
+  "title": "Submit Button Is Disabled During Loading State to Prevent Duplicate Submissions",
+  "description": "Verifies that once the login form is submitted with valid-format credentials, the submit button becomes disabled (or the form becomes non-interactive) during the pending API request, preventing a second submission before the first completes.",
+  "test_type": "functional",
+  "expected_result": "After the initial form submission, the submit button transitions to a disabled state for the duration of the pending API call, and a loading indicator is shown. A second click on the disabled button does not fire an additional request. The form re-enables only after the API responds.",
+  "test_steps": [
+    {
+      "step_number": 1,
+      "action": "Navigate to the login page",
+      "expected": "Login page loads successfully",
+      "selector": "body",
+      "action_type": "navigate",
+      "input_value": "/login",
+      "assertion": {
+        "type": "url",
+        "value": "/login"
+      }
+    },
+    {
+      "step_number": 2,
+      "action": "Fill the email field with a valid-format email",
+      "expected": "Email field is populated",
+      "selector": "input[name=\"email\"]",
+      "action_type": "fill",
+      "input_value": "john@example.com",
+      "assertion": {
+        "type": "value",
+        "value": "john@example.com"
+      }
+    },
+    {
+      "step_number": 3,
+      "action": "Fill the password field with a password",
+      "expected": "Password field is populated",
+      "selector": "input[name=\"password\"]",
+      "action_type": "fill",
+      "input_value": "SecurePass123!",
+      "assertion": {
+        "type": "value",
+        "value": "SecurePass123!"
+      }
+    },
+    {
+      "step_number": 4,
+      "action": "Click the submit button to trigger the login request",
+      "expected": "Form is submitted and a loading indicator appears",
+      "selector": "button[type=\"submit\"]",
+      "action_type": "click",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid=\"loading-indicator\"]"
+      }
+    },
+    {
+      "step_number": 5,
+      "action": "Immediately verify the submit button is disabled while the request is in flight",
+      "expected": "The submit button is in a disabled state during loading, preventing a second click",
+      "selector": "button[type=\"submit\"]",
+      "action_type": "wait",
+      "assertion": {
+        "type": "disabled"
+      }
+    },
+    {
+      "step_number": 6,
+      "action": "Attempt to click the disabled submit button a second time",
+      "expected": "Click is ignored; no additional network request is triggered; loading state persists",
+      "selector": "button[type=\"submit\"]",
+      "action_type": "click",
+      "assertion": {
+        "type": "disabled"
+      }
+    }
+  ]
+}

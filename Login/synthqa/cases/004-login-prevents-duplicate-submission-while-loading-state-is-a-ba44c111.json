@@ -1,0 +1,88 @@
+{
+  "id": "ba44c111-8b1b-4a0a-9020-d6b09f109817",
+  "title": "Login Prevents Duplicate Submission While Loading State Is Active",
+  "description": "Verifies that after clicking the Sign In button, the submit button is disabled and cannot be clicked again until the authentication response is received, preventing duplicate API requests.",
+  "test_type": "functional",
+  "expected_result": "Immediately after clicking Sign In, the submit button transitions to a disabled state and a loading indicator is shown. The button remains disabled until the server responds. On success, the user is redirected to /dashboard, confirming no duplicate submission occurred.",
+  "test_steps": [
+    {
+      "step_number": 1,
+      "action": "Navigate to the login page",
+      "expected": "Login page loads at /login",
+      "selector": "body",
+      "action_type": "navigate",
+      "input_value": "/login",
+      "assertion": {
+        "type": "url",
+        "value": "/login"
+      }
+    },
+    {
+      "step_number": 2,
+      "action": "Fill in the email field",
+      "expected": "Email field contains 'carlos.mendez@techcorp.io'",
+      "selector": "input[name=\"email\"]",
+      "action_type": "fill",
+      "input_value": "carlos.mendez@techcorp.io",
+      "assertion": {
+        "type": "value",
+        "value": "carlos.mendez@techcorp.io"
+      }
+    },
+    {
+      "step_number": 3,
+      "action": "Fill in the password field",
+      "expected": "Password field is populated",
+      "selector": "input[name=\"password\"]",
+      "action_type": "fill",
+      "input_value": "SecurePass123!",
+      "assertion": {
+        "type": "value",
+        "value": "SecurePass123!"
+      }
+    },
+    {
+      "step_number": 4,
+      "action": "Verify the submit button is enabled before clicking",
+      "expected": "Submit button is enabled and ready to click",
+      "selector": "button[type=\"submit\"]",
+      "action_type": "wait",
+      "assertion": {
+        "type": "enabled"
+      }
+    },
+    {
+      "step_number": 5,
+      "action": "Click the Submit / Sign In button",
+      "expected": "Form is submitted and loading indicator appears",
+      "selector": "button[type=\"submit\"]",
+      "action_type": "click",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid=\"loading-indicator\"]"
+      }
+    },
+    {
+      "step_number": 6,
+      "action": "Immediately verify the submit button is disabled during loading",
+      "expected": "Submit button is disabled during the loading/pending state",
+      "selector": "button[type=\"submit\"]",
+      "action_type": "wait",
+      "assertion": {
+        "type": "disabled"
+      }
+    },
+    {
+      "step_number": 7,
+      "action": "Wait for redirect to confirm login succeeded after loading resolves",
+      "expected": "User is redirected to /dashboard confirming successful authentication",
+      "selector": "body",
+      "action_type": "wait",
+      "wait_time": 5000,
+      "assertion": {
+        "type": "url",
+        "value": "/dashboard"
+      }
+    }
+  ]
+}

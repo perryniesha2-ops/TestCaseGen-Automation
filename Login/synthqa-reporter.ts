@@ -1,4 +1,4 @@
-import {
+import type {
   Reporter,
   TestCase,
   TestResult,
@@ -23,12 +23,7 @@ class SynthQAReporter implements Reporter {
   }
 
   onTestEnd(test: TestCase, result: TestResult) {
-    console.log("test title:", test.title);
-    console.log("test full title:", test.titlePath());
-    console.log("extracted id:", this.extractTestCaseId(test));
-
     const duration = result.duration / 1000 / 60;
-
     this.testResults.push({
       test_case_id: this.extractTestCaseId(test),
       execution_status: this.mapStatus(result.status),
@@ -46,16 +41,10 @@ class SynthQAReporter implements Reporter {
     });
   }
 
-  async onEnd(result: FullResult) {
-    const passed = this.testResults.filter(
-      (t) => t.execution_status === "passed",
-    ).length;
-    const failed = this.testResults.filter(
-      (t) => t.execution_status === "failed",
-    ).length;
-    const skipped = this.testResults.filter(
-      (t) => t.execution_status === "skipped",
-    ).length;
+  async onEnd(_result: FullResult) {
+    const passed  = this.testResults.filter((t) => t.execution_status === "passed").length;
+    const failed  = this.testResults.filter((t) => t.execution_status === "failed").length;
+    const skipped = this.testResults.filter((t) => t.execution_status === "skipped").length;
 
     const payload = {
       suite_id: this.suiteId,
@@ -80,63 +69,41 @@ class SynthQAReporter implements Reporter {
 
   private mapStatus(status: string): string {
     if (status === "passed") return "passed";
-    if (status === "failed") return "failed";
     if (status === "skipped") return "skipped";
     return "failed";
   }
 
   private extractTestCaseId(test: TestCase): string | null {
-    const uuidRegex =
-      /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
+    const uuidRegex = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
     const match = test.title.match(uuidRegex);
     return match ? match[0] : null;
   }
 
   private getExecutionNotes(result: TestResult): string | null {
-    if (result.retry > 0) {
-      return `Test retried ${result.retry} time(s)`;
-    }
+    if (result.retry > 0) return `Test retried ${result.retry} time(s)`;
     return result.status === "passed" ? "Test passed successfully" : null;
   }
 
   private getPlaywrightVersion(): string {
-    try {
-      return require("@playwright/test/package.json").version;
-    } catch {
-      return "unknown";
-    }
+    try { return require("@playwright/test/package.json").version; }
+    catch { return "unknown"; }
   }
 
   private async sendToSynthQA(data: any) {
     const webhookUrl = process.env.SYNTHQA_WEBHOOK_URL;
-    const apiKey = process.env.SYNTHQA_API_KEY;
+    const apiKey     = process.env.SYNTHQA_API_KEY;
 
     if (!webhookUrl) {
-      console.log("⚠️  SYNTHQA_WEBHOOK_URL not set - skipping result upload");
-      console.log(
-        "   To sync results back to SynthQA, add SYNTHQA_WEBHOOK_URL to .env",
-      );
+      console.log("⚠️  SYNTHQA_WEBHOOK_URL not set — skipping result upload");
       return;
     }
-
     if (!apiKey) {
-      console.log("⚠️  SYNTHQA_API_KEY not set - skipping result upload");
+      console.log("⚠️  SYNTHQA_API_KEY not set — skipping result upload");
       return;
     }
 
     try {
-      console.log("📤 Sending test results to SynthQA...");
-      console.log("   Suite ID:", data.suite_id);
-      console.log("   Total results:", data.test_results.length);
-      console.log(
-        "   Test case IDs:",
-        data.test_results.map((r: any) => r.test_case_id),
-      );
-      console.log(
-        "   Statuses:",
-        data.test_results.map((r: any) => r.execution_status),
-      );
-
+      console.log("📤 Sending results to SynthQA...");
       const response = await fetch(webhookUrl, {
         method: "POST",
         headers: {
@@ -146,12 +113,11 @@ class SynthQAReporter implements Reporter {
         body: JSON.stringify(data),
       });
 
-      const responseText = await response.text();
-      console.log("   Response status:", response.status);
-      console.log("   Response body:", responseText);
-
       if (!response.ok) {
-        console.error(`❌ Failed to send results: ${response.statusText}`);
+        console.error(`❌ Failed to send results: ${response.status} ${response.statusText}`);
+        console.error(await response.text());
+      } else {
+        console.log("✅ Results sent to SynthQA");
       }
     } catch (error) {
       console.error("❌ Error sending results to SynthQA:", error);

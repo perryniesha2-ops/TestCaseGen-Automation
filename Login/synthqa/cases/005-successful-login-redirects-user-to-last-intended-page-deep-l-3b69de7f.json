@@ -1,0 +1,91 @@
+{
+  "id": "3b69de7f-7c03-4ae0-80ff-8bf2ef871378",
+  "title": "Successful Login Redirects User to Last Intended Page (Deep Link Redirect)",
+  "description": "Verifies that when an unauthenticated user attempts to access a protected page and is redirected to login, after successful authentication they are forwarded to the originally requested URL rather than the default dashboard.",
+  "test_type": "functional",
+  "expected_result": "After logging in successfully, the user is redirected to /settings/profile (the originally intended page) rather than the default /dashboard, confirming that the post-login destination correctly reflects the last intended page.",
+  "test_steps": [
+    {
+      "step_number": 1,
+      "action": "Navigate directly to a protected settings page while unauthenticated",
+      "expected": "User is redirected to the login page because they are not authenticated",
+      "selector": "body",
+      "action_type": "navigate",
+      "input_value": "/settings/profile",
+      "assertion": {
+        "type": "url",
+        "value": "/login"
+      }
+    },
+    {
+      "step_number": 2,
+      "action": "Verify the login form is displayed after redirect",
+      "expected": "Login form is visible on the page",
+      "selector": "[data-testid=\"login-form\"]",
+      "action_type": "wait",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid=\"login-form\"]"
+      }
+    },
+    {
+      "step_number": 3,
+      "action": "Enter valid email into the email field",
+      "expected": "Email field contains 'priya.sharma@globalinc.com'",
+      "selector": "input[name=\"email\"]",
+      "action_type": "fill",
+      "input_value": "priya.sharma@globalinc.com",
+      "assertion": {
+        "type": "value",
+        "value": "priya.sharma@globalinc.com",
+        "target": "input[name=\"email\"]"
+      }
+    },
+    {
+      "step_number": 4,
+      "action": "Enter valid password into the password field",
+      "expected": "Password field is populated",
+      "selector": "input[name=\"password\"]",
+      "action_type": "fill",
+      "input_value": "SecurePass123!",
+      "assertion": {
+        "type": "value",
+        "value": "SecurePass123!",
+        "target": "input[name=\"password\"]"
+      }
+    },
+    {
+      "step_number": 5,
+      "action": "Click the Sign In button to authenticate",
+      "expected": "Loading state is displayed",
+      "selector": "button[type=\"submit\"]",
+      "action_type": "click",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid=\"loading-spinner\"]"
+      }
+    },
+    {
+      "step_number": 6,
+      "action": "Wait for redirect to the originally intended protected page",
+      "expected": "User is redirected to /settings/profile (the originally intended page), not /dashboard",
+      "selector": "[data-testid=\"profile-settings\"]",
+      "action_type": "wait",
+      "assertion": {
+        "type": "url",
+        "value": "/settings/profile"
+      }
+    },
+    {
+      "step_number": 7,
+      "action": "Verify the profile settings page content is rendered",
+      "expected": "Profile settings content is visible, confirming the intended destination was restored",
+      "selector": "[data-testid=\"profile-settings-content\"]",
+      "action_type": "wait",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid=\"profile-settings-content\"]"
+      }
+    }
+  ]
+}

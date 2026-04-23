@@ -1,0 +1,65 @@
+{
+  "id": "d5417e84-176a-4f0e-8210-ff718413ef33",
+  "title": "Submit Login Form With All Fields Empty Shows Required Field Errors",
+  "description": "Verifies that submitting the login form without entering any credentials displays inline validation errors for both the email/username and password fields, and does not trigger a network request or loading state.",
+  "test_type": "functional",
+  "expected_result": "Both the email/username and password fields display inline required-field error messages. No loading state is shown, no network request is fired, and the user remains on the login page.",
+  "test_steps": [
+    {
+      "step_number": 1,
+      "action": "Navigate to the login page",
+      "expected": "Login page is loaded and the URL is /login",
+      "selector": "body",
+      "action_type": "navigate",
+      "input_value": "/login",
+      "assertion": {
+        "type": "url",
+        "value": "/login"
+      }
+    },
+    {
+      "step_number": 2,
+      "action": "Click the submit button without filling in any fields",
+      "expected": "Form submission is attempted; no loading spinner appears",
+      "selector": "button[type=\"submit\"]",
+      "action_type": "click",
+      "assertion": {
+        "type": "hidden",
+        "target": "[data-testid=\"loading-spinner\"]"
+      }
+    },
+    {
+      "step_number": 3,
+      "action": "Verify inline validation error is shown for the email/username field",
+      "expected": "An error message such as 'Email or username is required' is visible beneath the email/username field",
+      "selector": "[data-testid=\"email-error\"]",
+      "action_type": "wait",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid=\"email-error\"]"
+      }
+    },
+    {
+      "step_number": 4,
+      "action": "Verify inline validation error is shown for the password field",
+      "expected": "An error message such as 'Password is required' is visible beneath the password field",
+      "selector": "[data-testid=\"password-error\"]",
+      "action_type": "wait",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid=\"password-error\"]"
+      }
+    },
+    {
+      "step_number": 5,
+      "action": "Verify the page URL has not changed — no redirect occurred",
+      "expected": "User remains on /login; no redirect to dashboard or any other page",
+      "action_type": "wait",
+      "wait_time": 1000,
+      "assertion": {
+        "type": "url",
+        "value": "/login"
+      }
+    }
+  ]
+}

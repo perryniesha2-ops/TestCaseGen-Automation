@@ -5,7 +5,6 @@ export const test = base.extend({
     const email = process.env.USER_EMAIL;
     const password = process.env.USER_PASSWORD;
     const baseUrl = process.env.BASE_URL;
-
     if (email && password && baseUrl) {
       await page.goto(baseUrl + '/login');
       await page.fill('[name="email"]', email);
@@ -13,7 +12,6 @@ export const test = base.extend({
       await page.click('button[type="submit"]');
       await page.waitForURL('**/dashboard', { timeout: 10000 }).catch(() => {});
     }
-
     await use(page);
   },
 });

@@ -1,0 +1,78 @@
+{
+  "id": "113608dd-45fe-4d95-9bfd-7ba03b3b70c7",
+  "title": "Login With Malformed Email Format Displays Inline Format Validation Error",
+  "description": "Verifies that entering a syntactically invalid email address (missing '@' and domain) into the email field and submitting triggers an inline format-validation error message and prevents authentication.",
+  "test_type": "functional",
+  "expected_result": "The email field shows an inline validation error indicating the format is invalid. No loading state is triggered, no API call is made, and the user remains on the login page.",
+  "test_steps": [
+    {
+      "step_number": 1,
+      "action": "Navigate to the login page",
+      "expected": "Login page loads successfully",
+      "selector": "body",
+      "action_type": "navigate",
+      "input_value": "/login",
+      "assertion": {
+        "type": "url",
+        "value": "/login"
+      }
+    },
+    {
+      "step_number": 2,
+      "action": "Fill the email field with a malformed email address",
+      "expected": "The malformed string 'not-an-email-address' is entered into the email field",
+      "selector": "[data-testid=\"email-input\"]",
+      "action_type": "fill",
+      "input_value": "not-an-email-address",
+      "assertion": {
+        "type": "value",
+        "value": "not-an-email-address"
+      }
+    },
+    {
+      "step_number": 3,
+      "action": "Fill the password field with a plausible password",
+      "expected": "Password field is populated",
+      "selector": "[data-testid=\"password-input\"]",
+      "action_type": "fill",
+      "input_value": "TestPassword123!",
+      "assertion": {
+        "type": "value",
+        "value": "TestPassword123!"
+      }
+    },
+    {
+      "step_number": 4,
+      "action": "Click the submit button",
+      "expected": "Form submission is attempted",
+      "selector": "[data-testid=\"login-submit-button\"]",
+      "action_type": "click",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid=\"email-error-message\"]"
+      }
+    },
+    {
+      "step_number": 5,
+      "action": "Verify the email format validation error message is displayed",
+      "expected": "An inline error message such as 'Please enter a valid email address' is visible under the email field",
+      "selector": "[data-testid=\"email-error-message\"]",
+      "action_type": "wait",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid=\"email-error-message\"]"
+      }
+    },
+    {
+      "step_number": 6,
+      "action": "Verify the user remains on the login page",
+      "expected": "URL is still /login; no authentication took place",
+      "selector": "body",
+      "action_type": "wait",
+      "assertion": {
+        "type": "url",
+        "value": "/login"
+      }
+    }
+  ]
+}

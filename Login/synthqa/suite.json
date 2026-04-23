@@ -1,0 +1,90 @@
+{
+  "generatedAt": "2026-04-22T03:44:38.800Z",
+  "suite": {
+    "id": "8222510c-e285-488a-a8a9-1a9522531b7f",
+    "name": "User Login",
+    "description": "User Login"
+  },
+  "cases": [
+    {
+      "id": "f99c62d9-175f-438a-bd19-16fc5ceed9ea",
+      "title": "Successful Login with Email and Password Redirects to Dashboard",
+      "sequence_order": 1,
+      "priority": "medium",
+      "estimated_duration_minutes": 5,
+      "caseKey": "001-successful-login-with-email-and-password-redirects-to-dashbo-f99c62d9"
+    },
+    {
+      "id": "f76e1a54-0966-4ce3-abb1-660e4a05519c",
+      "title": "Successful Login with Username and Password Redirects to Dashboard",
+      "sequence_order": 2,
+      "priority": "medium",
+      "estimated_duration_minutes": 5,
+      "caseKey": "002-successful-login-with-username-and-password-redirects-to-das-f76e1a54"
+    },
+    {
+      "id": "fcc2f78e-5b35-4450-bbaa-e09ddc55e92b",
+      "title": "Remember Me Checkbox Persists Authenticated Session Across Browser Restart",
+      "sequence_order": 3,
+      "priority": "medium",
+      "estimated_duration_minutes": 5,
+      "caseKey": "003-remember-me-checkbox-persists-authenticated-session-across-b-fcc2f78e"
+    },
+    {
+      "id": "ba44c111-8b1b-4a0a-9020-d6b09f109817",
+      "title": "Login Prevents Duplicate Submission While Loading State Is Active",
+      "sequence_order": 4,
+      "priority": "medium",
+      "estimated_duration_minutes": 5,
+      "caseKey": "004-login-prevents-duplicate-submission-while-loading-state-is-a-ba44c111"
+    },
+    {
+      "id": "3b69de7f-7c03-4ae0-80ff-8bf2ef871378",
+      "title": "Successful Login Redirects User to Last Intended Page (Deep Link Redirect)",
+      "sequence_order": 5,
+      "priority": "medium",
+      "estimated_duration_minutes": 5,
+      "caseKey": "005-successful-login-redirects-user-to-last-intended-page-deep-l-3b69de7f"
+    },
+    {
+      "id": "d5417e84-176a-4f0e-8210-ff718413ef33",
+      "title": "Submit Login Form With All Fields Empty Shows Required Field Errors",
+      "sequence_order": 6,
+      "priority": "medium",
+      "estimated_duration_minutes": 5,
+      "caseKey": "006-submit-login-form-with-all-fields-empty-shows-required-field-d5417e84"
+    },
+    {
+      "id": "113608dd-45fe-4d95-9bfd-7ba03b3b70c7",
+      "title": "Login With Malformed Email Format Displays Inline Format Validation Error",
+      "sequence_order": 7,
+      "priority": "medium",
+      "estimated_duration_minutes": 5,
+      "caseKey": "007-login-with-malformed-email-format-displays-inline-format-val-113608dd"
+    },
+    {
+      "id": "b97b868c-cdb0-44b0-aa11-227692d1d302",
+      "title": "Login With Correct Email But Wrong Password Shows Generic Error Without Revealing Account Existence",
+      "sequence_order": 8,
+      "priority": "medium",
+      "estimated_duration_minutes": 5,
+      "caseKey": "008-login-with-correct-email-but-wrong-password-shows-generic-er-b97b868c"
+    },
+    {
+      "id": "d1d5142b-dc00-45a9-a9b8-5402b4f817a1",
+      "title": "Submit Button Is Disabled During Loading State to Prevent Duplicate Submissions",
+      "sequence_order": 9,
+      "priority": "medium",
+      "estimated_duration_minutes": 5,
+      "caseKey": "009-submit-button-is-disabled-during-loading-state-to-prevent-du-d1d5142b"
+    },
+    {
+      "id": "2509d089-d003-4e06-b643-4623736460d5",
+      "title": "Login With Excessively Long Password Value Displays Appropriate Validation Error",
+      "sequence_order": 10,
+      "priority": "medium",
+      "estimated_duration_minutes": 5,
+      "caseKey": "010-login-with-excessively-long-password-value-displays-appropri-2509d089"
+    }
+  ]
+}
