@@ -1,0 +1,65 @@
+{
+  "id": "43749226-b136-4635-b65e-64c98d6d00f3",
+  "title": "Login with email containing plus-tag and subdomain (RFC-valid but often rejected by naive validators)",
+  "description": "Verifies that the authentication system correctly accepts RFC 5321–compliant email addresses using the '+' tag syntax and multi-level subdomains. Naive regex validators frequently reject these, locking legitimate users out of their accounts permanently.",
+  "test_type": "functional",
+  "expected_result": "PASS: User is authenticated and redirected to the post-login dashboard with no errors. FAIL: An inline validation message such as 'Invalid email address' appears despite the email being RFC-compliant, or the server returns a 400/422 error — this would lock out any user who registered with a plus-tag address.",
+  "test_steps": [
+    {
+      "step_number": 1,
+      "action": "Navigate to the login page",
+      "expected": "Login page is displayed with email and password fields visible",
+      "selector": "body",
+      "action_type": "navigate",
+      "input_value": "/login",
+      "assertion": {
+        "type": "url",
+        "value": "/login"
+      }
+    },
+    {
+      "step_number": 2,
+      "action": "Fill in the email field with a valid RFC 5321 plus-tag address on a multi-level subdomain",
+      "expected": "The full email string 'qa.lead+smoke_2024@mail.staging.acme.co.uk' appears verbatim in the email field without truncation or modification",
+      "selector": "input[name='email']",
+      "action_type": "fill",
+      "input_value": "qa.lead+smoke_2024@mail.staging.acme.co.uk",
+      "assertion": {
+        "type": "value",
+        "value": "qa.lead+smoke_2024@mail.staging.acme.co.uk",
+        "target": "input[name='email']"
+      }
+    },
+    {
+      "step_number": 3,
+      "action": "Fill in the password field",
+      "expected": "Password field accepts input and masks characters",
+      "selector": "input[type='password']",
+      "action_type": "fill",
+      "input_value": "Tr0ub4dor&3"
+    },
+    {
+      "step_number": 4,
+      "action": "Submit the login form",
+      "expected": "Form is submitted; no inline validation error appears on the email field",
+      "selector": "[data-testid='submit-button']",
+      "action_type": "click",
+      "assertion": {
+        "type": "hidden",
+        "target": "[data-testid='email-error']"
+      }
+    },
+    {
+      "step_number": 5,
+      "action": "Verify successful authentication and redirect to the authenticated landing page",
+      "expected": "User avatar or authenticated dashboard element is visible, confirming the session was established",
+      "selector": "[data-testid='user-avatar']",
+      "action_type": "wait",
+      "wait_time": 5000,
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid='user-avatar']"
+      }
+    }
+  ]
+}

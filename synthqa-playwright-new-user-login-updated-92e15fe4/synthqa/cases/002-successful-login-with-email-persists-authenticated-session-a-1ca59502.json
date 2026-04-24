@@ -1,0 +1,94 @@
+{
+  "id": "1ca59502-c5ca-4852-bd2c-3c9fa3474449",
+  "title": "Successful Login with Email Persists Authenticated Session Across Page Refresh",
+  "description": "Verifies that after a successful email+password login, the authenticated session is durably established — not just a transient UI state — by confirming the user remains logged in after a full page reload and that the session token/cookie is correctly set.",
+  "test_type": "functional",
+  "expected_result": "PASS: User successfully authenticates, is redirected to /dashboard, and remains authenticated after a full page reload. The session cookie/token is correctly set and the UI reflects the correct identity. FAIL: User is redirected back to /login after reload (session stored only in memory), or the user menu shows a different user's identity, or the dashboard is accessible but the session token is missing from storage.",
+  "test_steps": [
+    {
+      "step_number": 1,
+      "action": "Navigate to the login page",
+      "expected": "Login page is displayed at /login URL",
+      "selector": "body",
+      "action_type": "navigate",
+      "input_value": "/login",
+      "assertion": {
+        "type": "url",
+        "value": "/login"
+      }
+    },
+    {
+      "step_number": 2,
+      "action": "Fill in the email address field",
+      "expected": "Email field contains 'margaret.holloway@acmecorp.io'",
+      "selector": "input[name='email']",
+      "action_type": "fill",
+      "input_value": "margaret.holloway@acmecorp.io",
+      "assertion": {
+        "type": "value",
+        "value": "margaret.holloway@acmecorp.io",
+        "target": "input[name='email']"
+      }
+    },
+    {
+      "step_number": 3,
+      "action": "Fill in the password field",
+      "expected": "Password field is populated (masked)",
+      "selector": "input[type='password']",
+      "action_type": "fill",
+      "input_value": "Tr0ub4dor&3!Zx",
+      "assertion": {
+        "type": "value",
+        "value": "Tr0ub4dor&3!Zx",
+        "target": "input[type='password']"
+      }
+    },
+    {
+      "step_number": 4,
+      "action": "Click the Sign In / Submit button",
+      "expected": "User is redirected away from /login to the authenticated landing page (e.g. /dashboard)",
+      "selector": "[data-testid='submit-button']",
+      "action_type": "click",
+      "assertion": {
+        "type": "url",
+        "value": "/dashboard"
+      }
+    },
+    {
+      "step_number": 5,
+      "action": "Verify the authenticated user's name or avatar is visible in the UI",
+      "expected": "User menu or greeting element showing 'margaret.holloway' or 'Margaret Holloway' is visible",
+      "selector": "[data-testid='user-menu']",
+      "action_type": "wait",
+      "wait_time": 3000,
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid='user-menu']"
+      }
+    },
+    {
+      "step_number": 6,
+      "action": "Perform a hard page reload to test session persistence",
+      "expected": "Page reloads and user remains on /dashboard without being redirected to /login",
+      "selector": "body",
+      "action_type": "press",
+      "input_value": "F5",
+      "assertion": {
+        "type": "url",
+        "value": "/dashboard"
+      }
+    },
+    {
+      "step_number": 7,
+      "action": "Confirm user menu is still visible after reload, confirming session was persisted",
+      "expected": "User menu remains visible — session was durably stored, not just held in React state",
+      "selector": "[data-testid='user-menu']",
+      "action_type": "wait",
+      "wait_time": 2000,
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid='user-menu']"
+      }
+    }
+  ]
+}

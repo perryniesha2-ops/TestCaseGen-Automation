@@ -1,0 +1,84 @@
+{
+  "id": "d4c65ddd-8f80-44ec-a650-4214b8a888d7",
+  "title": "Successful Login with Username (Non-Email) Routes to Correct Role-Based Dashboard",
+  "description": "Verifies that the system correctly accepts a plain username (not email format) as a valid credential identifier, authenticates the user, and redirects to the role-appropriate landing page — confirming the authentication pipeline handles both identifier types and that role resolution is correct post-login.",
+  "test_type": "functional",
+  "expected_result": "PASS: Login with a plain username succeeds, user lands on /supervisor/dashboard, role badge reads 'Supervisor', and user identity matches 'ops.supervisor_42'. FAIL: System rejects the username as invalid (treats it as malformed email), redirects to the wrong dashboard, assigns the wrong role, or displays another user's identity.",
+  "test_steps": [
+    {
+      "step_number": 1,
+      "action": "Navigate to the login page",
+      "expected": "Login page is displayed",
+      "selector": "body",
+      "action_type": "navigate",
+      "input_value": "/login",
+      "assertion": {
+        "type": "url",
+        "value": "/login"
+      }
+    },
+    {
+      "step_number": 2,
+      "action": "Fill in the username field with a plain username (no @ symbol, no domain)",
+      "expected": "Username field contains 'ops.supervisor_42'",
+      "selector": "input[name='email']",
+      "action_type": "fill",
+      "input_value": "ops.supervisor_42",
+      "assertion": {
+        "type": "value",
+        "value": "ops.supervisor_42",
+        "target": "input[name='email']"
+      }
+    },
+    {
+      "step_number": 3,
+      "action": "Fill in the password",
+      "expected": "Password field is populated",
+      "selector": "input[type='password']",
+      "action_type": "fill",
+      "input_value": "W!nd0wPane#99",
+      "assertion": {
+        "type": "value",
+        "value": "W!nd0wPane#99",
+        "target": "input[type='password']"
+      }
+    },
+    {
+      "step_number": 4,
+      "action": "Click the Sign In button",
+      "expected": "User is authenticated and redirected to the supervisor-specific dashboard URL",
+      "selector": "[data-testid='submit-button']",
+      "action_type": "click",
+      "assertion": {
+        "type": "url",
+        "value": "/supervisor/dashboard"
+      }
+    },
+    {
+      "step_number": 5,
+      "action": "Verify the role indicator in the UI reflects 'Supervisor' — not 'Admin' or 'User'",
+      "expected": "Role badge element is visible and displays 'Supervisor'",
+      "selector": "[data-testid='role-badge']",
+      "action_type": "wait",
+      "wait_time": 3000,
+      "assertion": {
+        "type": "text",
+        "value": "Supervisor",
+        "target": "[data-testid='role-badge']"
+      }
+    },
+    {
+      "step_number": 6,
+      "action": "Confirm the username is displayed correctly in the user profile area",
+      "expected": "User menu displays 'ops.supervisor_42' as the logged-in identity",
+      "selector": "[data-testid='user-menu']",
+      "action_type": "wait",
+      "wait_time": 1000,
+      "assertion": {
+        "type": "text",
+        "value": "ops.supervisor_42",
+        "target": "[data-testid='user-menu']"
+      }
+    }
+  ]
+}

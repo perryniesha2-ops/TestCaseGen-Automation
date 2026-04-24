@@ -1,0 +1,84 @@
+{
+  "id": "f1259933-2ad1-4b8b-ac56-05a89d731111",
+  "title": "Username field populated with Arabic RTL text renders and submits correctly in a LTR-oriented form layout",
+  "description": "RTL Unicode text (Arabic script) entered into a LTR-layout username field can expose multiple bug classes: visual rendering corruption (text direction overrides adjacent fields), incorrect string comparison if the server normalizes direction markers, or backend rejection of non-ASCII usernames where they should be allowed. Systems using usernames (not just email) must handle Unicode usernames per RFC 8265.",
+  "test_type": "functional",
+  "expected_result": "PASS: The Arabic username is transmitted to the server unmodified, the server performs a byte-accurate match, the user is authenticated, and the surrounding form layout remains intact during text entry. FAIL: (a) The form shows a validation error rejecting non-ASCII characters in the username field; (b) RTL text causes the password field or submit button to visually shift to the wrong side of the form; (c) the server normalizes or truncates the Arabic string causing an authentication failure for a valid account.",
+  "test_steps": [
+    {
+      "step_number": 1,
+      "action": "Navigate to the login page",
+      "expected": "Login page is displayed with username and password inputs",
+      "selector": "body",
+      "action_type": "navigate",
+      "input_value": "/login",
+      "assertion": {
+        "type": "url",
+        "value": "/login"
+      }
+    },
+    {
+      "step_number": 2,
+      "action": "Click the username field to focus it",
+      "expected": "Username field receives focus; cursor is visible",
+      "selector": "input[name='username']",
+      "action_type": "click"
+    },
+    {
+      "step_number": 3,
+      "action": "Type the Arabic RTL username into the username field",
+      "expected": "The Arabic string 'أحمد_المستخدم' is entered verbatim; the field may visually right-align text but the surrounding form layout (labels, password field, submit button) must remain correctly positioned in LTR order",
+      "selector": "input[name='username']",
+      "action_type": "fill",
+      "input_value": "أحمد_المستخدم",
+      "assertion": {
+        "type": "value",
+        "value": "أحمد_المستخدم",
+        "target": "input[name='username']"
+      }
+    },
+    {
+      "step_number": 4,
+      "action": "Verify the password field label and position are not displaced by the RTL content in the username field",
+      "expected": "Password field and its label are still visible and correctly positioned — RTL text in one field must not bleed its directionality into adjacent DOM elements",
+      "selector": "input[type='password']",
+      "action_type": "wait",
+      "wait_time": 500,
+      "assertion": {
+        "type": "visible",
+        "target": "input[type='password']"
+      }
+    },
+    {
+      "step_number": 5,
+      "action": "Fill in the password field",
+      "expected": "Password field accepts input without visual distortion",
+      "selector": "input[type='password']",
+      "action_type": "fill",
+      "input_value": "P@ssw0rd!2024"
+    },
+    {
+      "step_number": 6,
+      "action": "Submit the login form",
+      "expected": "Form submits the Arabic username as-is without stripping, reversing, or re-encoding the Unicode characters",
+      "selector": "[data-testid='submit-button']",
+      "action_type": "click",
+      "assertion": {
+        "type": "hidden",
+        "target": "[data-testid='username-error']"
+      }
+    },
+    {
+      "step_number": 7,
+      "action": "Verify successful authentication with the Arabic username account",
+      "expected": "User is authenticated and redirected to the dashboard; the displayed username or greeting reflects the correct Arabic string",
+      "selector": "[data-testid='user-avatar']",
+      "action_type": "wait",
+      "wait_time": 5000,
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid='user-avatar']"
+      }
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "id": "a6835aa2-3ceb-414d-9f86-713a386967aa",
+  "title": "Rapid double-submit of login form creates duplicate concurrent authentication requests — race condition producing two sessions",
+  "description": "Rapidly double-clicking (or keyboard-hammering) the submit button before the server responds can dispatch two simultaneous POST /auth/login requests. If the server or client does not debounce/idempotency-guard, this can create duplicate sessions, duplicate audit log entries, or trigger account-lockout thresholds prematurely on a good-credential login.",
+  "test_type": "functional",
+  "expected_result": "PASS: Only one authentication request is sent to the server (confirmed via network tab); only one session token is issued; the submit button is disabled after the first click until the response arrives. FAIL: Two identical POST requests are dispatched — this can cause duplicate session records, race conditions in account-lockout counters (e.g. incrementing failed-attempt counters twice for one attempt), or the second request arriving after a logout that invalidates the first token, causing a confusing UX loop.",
+  "test_steps": [
+    {
+      "step_number": 1,
+      "action": "Navigate to the login page",
+      "expected": "Login page is displayed",
+      "selector": "body",
+      "action_type": "navigate",
+      "input_value": "/login",
+      "assertion": {
+        "type": "url",
+        "value": "/login"
+      }
+    },
+    {
+      "step_number": 2,
+      "action": "Fill in a valid email address",
+      "expected": "Email field contains 'devraj.nair@acmecorp.dev'",
+      "selector": "input[name='email']",
+      "action_type": "fill",
+      "input_value": "devraj.nair@acmecorp.dev",
+      "assertion": {
+        "type": "value",
+        "value": "devraj.nair@acmecorp.dev",
+        "target": "input[name='email']"
+      }
+    },
+    {
+      "step_number": 3,
+      "action": "Fill in the correct password",
+      "expected": "Password field accepts input",
+      "selector": "input[type='password']",
+      "action_type": "fill",
+      "input_value": "C0nfluence#99"
+    },
+    {
+      "step_number": 4,
+      "action": "Click the submit button a first time",
+      "expected": "First click dispatches the login request; button may show a loading state",
+      "selector": "[data-testid='submit-button']",
+      "action_type": "click"
+    },
+    {
+      "step_number": 5,
+      "action": "Immediately click the submit button a second time without waiting for the response",
+      "expected": "Second click is either ignored (button is disabled/loading) or dispatches a second request — capture which behaviour occurs",
+      "selector": "[data-testid='submit-button']",
+      "action_type": "click"
+    },
+    {
+      "step_number": 6,
+      "action": "Wait for the page to settle after both clicks",
+      "expected": "Exactly one authenticated session is established; user is redirected once to the dashboard",
+      "selector": "[data-testid='user-avatar']",
+      "action_type": "wait",
+      "wait_time": 6000,
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid='user-avatar']"
+      }
+    },
+    {
+      "step_number": 7,
+      "action": "Verify the submit button was disabled or showed a loading indicator after the first click to prevent double submission",
+      "expected": "Submit button is in a disabled or loading state between click 1 and server response, preventing duplicate requests",
+      "selector": "[data-testid='submit-button']",
+      "action_type": "wait",
+      "wait_time": 500,
+      "assertion": {
+        "type": "disabled",
+        "target": "[data-testid='submit-button']"
+      }
+    }
+  ]
+}

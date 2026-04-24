@@ -1,0 +1,105 @@
+{
+  "id": "f83fcf10-02d9-4886-86b4-48495e82767b",
+  "title": "Authentication API returning HTTP 500 displays a user-facing error message instead of silently failing or exposing a stack trace",
+  "description": "Simulates a server-side failure (500 Internal Server Error) during the login API call and verifies the application handles it gracefully: shows a human-readable error to the user, does NOT expose internal details (stack traces, SQL errors, server paths), and does NOT leave the form in a broken state. Silent failures and stack-trace leaks are two of the most common high-severity bugs that reach production undetected.",
+  "test_type": "functional",
+  "expected_result": "PASS: A friendly, non-technical error message is shown; the form remains usable; no stack trace, SQL, or file path is exposed in the UI or response body visible to the user; URL stays at /login. FAIL: Page shows a raw stack trace or database error, the UI freezes with a permanent spinner, the user is silently not logged in with no message, or — critically — the user is redirected to /dashboard despite the 500.",
+  "test_steps": [
+    {
+      "step_number": 1,
+      "action": "Configure network interception to return HTTP 500 for the login API endpoint before navigating (done via test framework route mock)",
+      "expected": "Route interception is active; any POST to /api/auth/login will return 500",
+      "selector": "body",
+      "action_type": "wait",
+      "wait_time": 500
+    },
+    {
+      "step_number": 2,
+      "action": "Navigate to the login page",
+      "expected": "Login page loads normally",
+      "selector": "body",
+      "action_type": "navigate",
+      "input_value": "/login",
+      "assertion": {
+        "type": "url",
+        "value": "/login"
+      }
+    },
+    {
+      "step_number": 3,
+      "action": "Fill in the email field with a syntactically valid email",
+      "expected": "Email field is populated",
+      "selector": "input[name='email']",
+      "action_type": "fill",
+      "input_value": "rafael.okonkwo@nexusplatform.com",
+      "assertion": {
+        "type": "value",
+        "value": "rafael.okonkwo@nexusplatform.com",
+        "target": "input[name='email']"
+      }
+    },
+    {
+      "step_number": 4,
+      "action": "Fill in the password field with a plausible password",
+      "expected": "Password field is populated",
+      "selector": "input[type='password']",
+      "action_type": "fill",
+      "input_value": "Qx7!mPvL#2rZ"
+    },
+    {
+      "step_number": 5,
+      "action": "Click the submit button to trigger the login API call that will return 500",
+      "expected": "Form submits; a loading/spinner state appears momentarily",
+      "selector": "[data-testid='submit-button']",
+      "action_type": "click"
+    },
+    {
+      "step_number": 6,
+      "action": "Wait for the error state to resolve after the mocked 500 response",
+      "expected": "A user-facing error message is displayed, such as 'Something went wrong. Please try again later.'",
+      "selector": "[data-testid='login-error']",
+      "action_type": "wait",
+      "wait_time": 5000,
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid='login-error']"
+      }
+    },
+    {
+      "step_number": 7,
+      "action": "Verify the error message text does not contain server internals (stack trace keywords)",
+      "expected": "Error message does NOT contain text like 'NullPointerException', 'at com.', 'SELECT', 'ORA-', '/var/www/', or 'stack'",
+      "selector": "[data-testid='login-error']",
+      "action_type": "wait",
+      "wait_time": 500,
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid='login-error']"
+      }
+    },
+    {
+      "step_number": 8,
+      "action": "Verify the user remains on the login page and has NOT been redirected",
+      "expected": "URL still shows /login; no redirect to /dashboard or /home occurred",
+      "selector": "[data-testid='submit-button']",
+      "action_type": "wait",
+      "wait_time": 500,
+      "assertion": {
+        "type": "url",
+        "value": "/login"
+      }
+    },
+    {
+      "step_number": 9,
+      "action": "Verify the submit button is re-enabled and the form is still usable after the 500 error",
+      "expected": "Submit button is enabled; email and password fields are still accessible",
+      "selector": "[data-testid='submit-button']",
+      "action_type": "wait",
+      "wait_time": 500,
+      "assertion": {
+        "type": "enabled",
+        "target": "[data-testid='submit-button']"
+      }
+    }
+  ]
+}
