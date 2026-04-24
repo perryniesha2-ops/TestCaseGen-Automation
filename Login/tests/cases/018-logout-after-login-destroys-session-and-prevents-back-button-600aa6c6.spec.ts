@@ -54,6 +54,7 @@ test.describe(`Logout After Login Destroys Session and Prevents Back-Button Acce
 
     await test.step(`Step 4: Submit the login form`, async () => {
       await page.getByTestId("login-submit-button").click();
+      await page.waitForTimeout(3000);
       await expect(page).toHaveURL(baseUrl + "/dashboard");
 
       await page.screenshot({
@@ -77,6 +78,7 @@ test.describe(`Logout After Login Destroys Session and Prevents Back-Button Acce
       await page.getByLabel("Account menu").click();
       await page.getByRole("button", { name: "Logout" }).click();
       await page.getByRole("button", { name: "Sign out" }).click();
+      await page.waitForTimeout(3000);
 
       await expect(page).toHaveURL(/\/login/);
 
