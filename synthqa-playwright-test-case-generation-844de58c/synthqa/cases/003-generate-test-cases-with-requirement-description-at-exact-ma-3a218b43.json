@@ -1,0 +1,78 @@
+{
+  "id": "3a218b43-bbd4-434b-a9bd-840ca7eee751",
+  "title": "Generate Test Cases with Requirement Description at Exact Maximum Allowed Length",
+  "description": "Verifies that the system accepts a requirement description that is exactly at the maximum allowed character limit (500 characters) and successfully generates test cases without truncation or error.",
+  "test_type": "functional",
+  "expected_result": "The system accepts the 500-character input without truncation. Test cases are successfully generated and displayed. No validation error or character-limit warning is shown.",
+  "test_steps": [
+    {
+      "step_number": 1,
+      "action": "Navigate to the test case generation page",
+      "expected": "The test case generation page loads successfully",
+      "selector": "body",
+      "action_type": "navigate",
+      "input_value": "/generate",
+      "assertion": {
+        "type": "url",
+        "value": "/generate"
+      }
+    },
+    {
+      "step_number": 2,
+      "action": "Fill the requirement description with exactly 500 characters",
+      "expected": "All 500 characters are entered and displayed in the field",
+      "selector": "[data-testid=\"requirement-description\"]",
+      "action_type": "fill",
+      "input_value": "",
+      "assertion": {
+        "type": "count",
+        "value": "500"
+      }
+    },
+    {
+      "step_number": 3,
+      "action": "Verify the character counter shows 500/500",
+      "expected": "Character counter displays '500/500'",
+      "selector": "[data-testid=\"character-counter\"]",
+      "action_type": "click",
+      "assertion": {
+        "type": "text",
+        "value": "500/500"
+      }
+    },
+    {
+      "step_number": 4,
+      "action": "Select a test case template",
+      "expected": "Template is selected",
+      "selector": "[data-testid=\"template-selector\"]",
+      "action_type": "select",
+      "input_value": "Basic Functional",
+      "assertion": {
+        "type": "value",
+        "value": "Basic Functional"
+      }
+    },
+    {
+      "step_number": 5,
+      "action": "Click the Generate Test Cases button",
+      "expected": "The system accepts the input and begins generating test cases",
+      "selector": "[data-testid=\"generate-button\"]",
+      "action_type": "click",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid=\"loading-indicator\"]"
+      }
+    },
+    {
+      "step_number": 6,
+      "action": "Wait for the generation result to appear",
+      "expected": "Generated test cases are displayed on the page without any error",
+      "selector": "[data-testid=\"generated-test-cases\"]",
+      "action_type": "wait",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid=\"generated-test-cases\"]"
+      }
+    }
+  ]
+}

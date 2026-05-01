@@ -1,0 +1,90 @@
+{
+  "id": "b3e62225-e10b-4e0a-9ce5-7a10e35bc7d3",
+  "title": "User Selects Multiple Requirements and Generates a Combined Test Case Set",
+  "description": "Verifies that a user can select multiple requirements simultaneously and generate a consolidated set of test cases covering all selected requirements.",
+  "test_type": "functional",
+  "expected_result": "The system generates a combined set of structured test cases that cover both the 'User Registration' and 'Email Verification' requirements. Each test case is clearly associated with its source requirement.",
+  "test_steps": [
+    {
+      "step_number": 1,
+      "action": "Navigate to the test case generator page",
+      "expected": "Test case generator page is displayed",
+      "selector": "body",
+      "action_type": "navigate",
+      "input_value": "/generate",
+      "assertion": {
+        "type": "url",
+        "value": "/generate"
+      }
+    },
+    {
+      "step_number": 2,
+      "action": "Check the requirement checkbox for 'User Registration'",
+      "expected": "Checkbox for 'User Registration' is checked",
+      "selector": "[data-testid='requirement-checkbox-user-registration']",
+      "action_type": "check",
+      "assertion": {
+        "type": "checked",
+        "target": "[data-testid='requirement-checkbox-user-registration']"
+      }
+    },
+    {
+      "step_number": 3,
+      "action": "Check the requirement checkbox for 'Email Verification'",
+      "expected": "Checkbox for 'Email Verification' is checked",
+      "selector": "[data-testid='requirement-checkbox-email-verification']",
+      "action_type": "check",
+      "assertion": {
+        "type": "checked",
+        "target": "[data-testid='requirement-checkbox-email-verification']"
+      }
+    },
+    {
+      "step_number": 4,
+      "action": "Select the 'Standard' template",
+      "expected": "Template 'Standard' is selected",
+      "selector": "[data-testid='template-selector']",
+      "action_type": "select",
+      "input_value": "Standard",
+      "assertion": {
+        "type": "value",
+        "value": "Standard",
+        "target": "[data-testid='template-selector']"
+      }
+    },
+    {
+      "step_number": 5,
+      "action": "Click the Generate Test Cases button",
+      "expected": "Generation process begins",
+      "selector": "[data-testid='generate-button']",
+      "action_type": "click",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid='loading-spinner']"
+      }
+    },
+    {
+      "step_number": 6,
+      "action": "Wait for the results panel to appear",
+      "expected": "Results panel is displayed with test cases",
+      "selector": "[data-testid='results-panel']",
+      "action_type": "wait",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid='results-panel']"
+      }
+    },
+    {
+      "step_number": 7,
+      "action": "Verify that generated test cases reference both selected requirements",
+      "expected": "Test cases are tagged with both 'User Registration' and 'Email Verification'",
+      "selector": "[data-testid='test-case-tags']",
+      "action_type": "hover",
+      "assertion": {
+        "type": "text",
+        "value": "User Registration, Email Verification",
+        "target": "[data-testid='test-case-tags']"
+      }
+    }
+  ]
+}

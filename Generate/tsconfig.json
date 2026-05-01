@@ -13,6 +13,7 @@
   "include": [
     "tests",
     "playwright.config.ts",
-    "synthqa"
+    "synthqa",
+    "synthqa-reporter.ts"
   ]
 }

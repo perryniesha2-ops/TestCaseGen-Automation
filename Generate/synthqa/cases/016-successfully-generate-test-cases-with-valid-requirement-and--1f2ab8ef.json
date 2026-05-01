@@ -1,0 +1,79 @@
+{
+  "id": "1f2ab8ef-efd5-476f-a7dd-9ca5ee74ee61",
+  "title": "Successfully Generate Test Cases With Valid Requirement and Default Template",
+  "description": "Verifies that a logged-in user can select a requirement, choose the default template, and successfully generate structured test cases that are displayed on screen.",
+  "test_type": "functional",
+  "expected_result": "The system generates and displays one or more structured test cases based on the selected requirement and default template. Each test case contains a title, description, and steps. No error messages appear.",
+  "test_steps": [
+    {
+      "step_number": 1,
+      "action": "Navigate to the test case generator page",
+      "expected": "Test case generator page loads successfully",
+      "selector": "body",
+      "action_type": "navigate",
+      "input_value": "/generate",
+      "assertion": {
+        "type": "url",
+        "value": "/generate"
+      }
+    },
+    {
+      "step_number": 2,
+      "action": "Select a requirement from the requirements dropdown",
+      "expected": "Requirement 'User Authentication Flow' is selected in the dropdown",
+      "selector": "[data-testid=\"requirement-dropdown\"]",
+      "action_type": "select",
+      "input_value": "User Authentication Flow",
+      "assertion": {
+        "type": "value",
+        "value": "User Authentication Flow"
+      }
+    },
+    {
+      "step_number": 3,
+      "action": "Select the default template from the template dropdown",
+      "expected": "Template 'Default Template' is selected",
+      "selector": "[data-testid=\"template-dropdown\"]",
+      "action_type": "select",
+      "input_value": "Default Template",
+      "assertion": {
+        "type": "value",
+        "value": "Default Template"
+      }
+    },
+    {
+      "step_number": 4,
+      "action": "Click the Generate Test Cases button",
+      "expected": "A loading indicator appears while test cases are being generated",
+      "selector": "[data-testid=\"generate-button\"]",
+      "action_type": "click",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid=\"loading-indicator\"]"
+      }
+    },
+    {
+      "step_number": 5,
+      "action": "Wait for the test case results to appear",
+      "expected": "Test cases results panel becomes visible",
+      "selector": "[data-testid=\"test-results-panel\"]",
+      "action_type": "wait",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid=\"test-results-panel\"]"
+      }
+    },
+    {
+      "step_number": 6,
+      "action": "Verify the generated test cases list is populated",
+      "expected": "At least one structured test case is displayed in the results panel",
+      "selector": "[data-testid=\"test-cases-list\"]",
+      "action_type": "hover",
+      "assertion": {
+        "type": "count",
+        "value": "1",
+        "target": "[data-testid=\"test-case-item\"]"
+      }
+    }
+  ]
+}

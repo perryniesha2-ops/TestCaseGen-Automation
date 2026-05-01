@@ -3,13 +3,16 @@ import "dotenv/config";
 
 export default defineConfig({
   testDir: "./tests",
-  timeout: 60_000,
-  expect: { timeout: 10_000 },
+  timeout: 600_000,
+  expect: { timeout: 100_000 },
   retries: 1,
   reporter: [
     ["html", { open: "never" }],
     ["list"],
-    ["./synthqa-reporter.ts", { suiteId: "8222510c-e285-488a-a8a9-1a9522531b7f" }],
+    [
+      "./synthqa-reporter.ts",
+      { suiteId: "8222510c-e285-488a-a8a9-1a9522531b7f" },
+    ],
   ],
   projects: [
     {

@@ -1,4 +1,4 @@
-import {
+import type {
   Reporter,
   TestCase,
   TestResult,
@@ -11,20 +11,19 @@ class SynthQAReporter implements Reporter {
   private testResults: any[] = [];
 
   constructor(options: { suiteId: string }) {
-    this.suiteId = options.suiteId || process.env.SYNTHQA_SUITE_ID || 'unknown';
+    this.suiteId = options.suiteId || process.env.SYNTHQA_SUITE_ID || "unknown";
     this.sessionId = `playwright-${Date.now()}`;
   }
 
   private getOS(): string {
     const p = process.platform;
-    if (p === 'darwin') return 'macOS';
-    if (p === 'win32') return 'Windows';
-    return 'Linux';
+    if (p === "darwin") return "macOS";
+    if (p === "win32") return "Windows";
+    return "Linux";
   }
 
   onTestEnd(test: TestCase, result: TestResult) {
     const duration = result.duration / 1000 / 60;
-
     this.testResults.push({
       test_case_id: this.extractTestCaseId(test),
       execution_status: this.mapStatus(result.status),
@@ -34,30 +33,30 @@ class SynthQAReporter implements Reporter {
       execution_notes: this.getExecutionNotes(result),
       failure_reason: result.error?.message || null,
       stack_trace: result.error?.stack || null,
-      browser: process.env.BROWSER || 'chromium',
+      browser: process.env.BROWSER || "chromium",
       os_version: this.getOS(),
-      test_environment: process.env.TEST_ENV || 'local',
-      framework: 'playwright',
+      test_environment: process.env.TEST_ENV || "local",
+      framework: "playwright",
       framework_version: this.getPlaywrightVersion(),
     });
   }
 
-  async onEnd(result: FullResult) {
-    const passed = this.testResults.filter((t) => t.execution_status === 'passed').length;
-    const failed = this.testResults.filter((t) => t.execution_status === 'failed').length;
-    const skipped = this.testResults.filter((t) => t.execution_status === 'skipped').length;
+  async onEnd(_result: FullResult) {
+    const passed  = this.testResults.filter((t) => t.execution_status === "passed").length;
+    const failed  = this.testResults.filter((t) => t.execution_status === "failed").length;
+    const skipped = this.testResults.filter((t) => t.execution_status === "skipped").length;
 
     const payload = {
       suite_id: this.suiteId,
       session_id: this.sessionId,
-      framework: 'playwright',
+      framework: "playwright",
       test_results: this.testResults,
       metadata: {
         total_tests: this.testResults.length,
         passed_tests: passed,
         failed_tests: failed,
         skipped_tests: skipped,
-        overall_status: failed > 0 ? 'failed' : 'passed',
+        overall_status: failed > 0 ? "failed" : "passed",
         ci_provider: process.env.CI_PROVIDER || null,
         branch: process.env.GIT_BRANCH || null,
         commit_sha: process.env.GIT_COMMIT || null,
@@ -69,10 +68,9 @@ class SynthQAReporter implements Reporter {
   }
 
   private mapStatus(status: string): string {
-    if (status === 'passed') return 'passed';
-    if (status === 'failed') return 'failed';
-    if (status === 'skipped') return 'skipped';
-    return 'failed';
+    if (status === "passed") return "passed";
+    if (status === "skipped") return "skipped";
+    return "failed";
   }
 
   private extractTestCaseId(test: TestCase): string | null {
@@ -82,60 +80,47 @@ class SynthQAReporter implements Reporter {
   }
 
   private getExecutionNotes(result: TestResult): string | null {
-    if (result.retry > 0) {
-      return `Test retried ${result.retry} time(s)`;
-    }
-    return result.status === 'passed' ? 'Test passed successfully' : null;
+    if (result.retry > 0) return `Test retried ${result.retry} time(s)`;
+    return result.status === "passed" ? "Test passed successfully" : null;
   }
 
   private getPlaywrightVersion(): string {
-    try {
-      return require('@playwright/test/package.json').version;
-    } catch {
-      return 'unknown';
-    }
+    try { return require("@playwright/test/package.json").version; }
+    catch { return "unknown"; }
   }
 
   private async sendToSynthQA(data: any) {
     const webhookUrl = process.env.SYNTHQA_WEBHOOK_URL;
-    const apiKey = process.env.SYNTHQA_API_KEY;
+    const apiKey     = process.env.SYNTHQA_API_KEY;
 
     if (!webhookUrl) {
-      console.log('⚠️  SYNTHQA_WEBHOOK_URL not set - skipping result upload');
-      console.log('   To sync results back to SynthQA, add SYNTHQA_WEBHOOK_URL to .env');
+      console.log("⚠️  SYNTHQA_WEBHOOK_URL not set — skipping result upload");
       return;
     }
-
     if (!apiKey) {
-      console.log('⚠️  SYNTHQA_API_KEY not set - skipping result upload');
+      console.log("⚠️  SYNTHQA_API_KEY not set — skipping result upload");
       return;
     }
 
     try {
-      console.log('📤 Sending test results to SynthQA...');
-      console.log('   Suite ID:', data.suite_id);
-      console.log('   Total results:', data.test_results.length);
-      console.log('   Test case IDs:', data.test_results.map((r: any) => r.test_case_id));
-      console.log('   Statuses:', data.test_results.map((r: any) => r.execution_status));
-
+      console.log("📤 Sending results to SynthQA...");
       const response = await fetch(webhookUrl, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify(data),
       });
 
-      const responseText = await response.text();
-      console.log('   Response status:', response.status);
-      console.log('   Response body:', responseText);
-
       if (!response.ok) {
-        console.error(`❌ Failed to send results: ${response.statusText}`);
-      } 
+        console.error(`❌ Failed to send results: ${response.status} ${response.statusText}`);
+        console.error(await response.text());
+      } else {
+        console.log("✅ Results sent to SynthQA");
+      }
     } catch (error) {
-      console.error('❌ Error sending results to SynthQA:', error);
+      console.error("❌ Error sending results to SynthQA:", error);
     }
   }
 }

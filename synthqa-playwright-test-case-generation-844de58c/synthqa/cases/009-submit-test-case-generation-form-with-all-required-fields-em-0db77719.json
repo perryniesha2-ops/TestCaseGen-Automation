@@ -1,0 +1,61 @@
+{
+  "id": "0db77719-abdb-4dd8-bf0c-04fd2b2be4e6",
+  "title": "Submit Test Case Generation Form With All Required Fields Empty",
+  "description": "Verify that submitting the test case generation form without selecting any requirement or template displays appropriate validation error messages and prevents generation.",
+  "test_type": "functional",
+  "expected_result": "The system blocks form submission, displays field-level validation error messages for all required fields, and does not generate any test cases.",
+  "test_steps": [
+    {
+      "step_number": 1,
+      "action": "Navigate to the test case generation page",
+      "expected": "Test case generation page loads successfully",
+      "selector": "body",
+      "action_type": "navigate",
+      "input_value": "/generate",
+      "assertion": {
+        "type": "url",
+        "value": "/generate"
+      }
+    },
+    {
+      "step_number": 2,
+      "action": "Click the Generate Test Cases button without filling any fields",
+      "expected": "Form submission is blocked and validation errors appear",
+      "selector": "[data-testid=\"generate-button\"]",
+      "action_type": "click"
+    },
+    {
+      "step_number": 3,
+      "action": "Verify the requirement field error message is shown",
+      "expected": "Error message 'Please select at least one requirement' is visible",
+      "selector": "[data-testid=\"requirement-error\"]",
+      "action_type": "wait",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid=\"requirement-error\"]"
+      }
+    },
+    {
+      "step_number": 4,
+      "action": "Verify the template field error message is shown",
+      "expected": "Error message 'Please select a template' is visible",
+      "selector": "[data-testid=\"template-error\"]",
+      "action_type": "wait",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid=\"template-error\"]"
+      }
+    },
+    {
+      "step_number": 5,
+      "action": "Verify no test cases are generated (results panel remains empty)",
+      "expected": "Results panel is not visible or shows no generated content",
+      "selector": "[data-testid=\"results-panel\"]",
+      "action_type": "wait",
+      "assertion": {
+        "type": "hidden",
+        "target": "[data-testid=\"results-panel\"]"
+      }
+    }
+  ]
+}

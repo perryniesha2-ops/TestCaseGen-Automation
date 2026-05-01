@@ -1,0 +1,102 @@
+{
+  "id": "edadc9e0-fb8a-4111-b049-a96116360777",
+  "title": "Save Generated Test Cases to the Project Repository",
+  "description": "Verifies that a user can save the generated test cases to a specific project repository so they persist and are accessible from the project dashboard.",
+  "test_type": "functional",
+  "expected_result": "The generated test cases are saved to the 'E-Commerce Platform QA' project. A 'Test cases saved successfully' notification is displayed. The test cases are accessible from the project's test case repository.",
+  "test_steps": [
+    {
+      "step_number": 1,
+      "action": "Navigate to the test case generator page",
+      "expected": "Test case generator page loads",
+      "selector": "body",
+      "action_type": "navigate",
+      "input_value": "/generate",
+      "assertion": {
+        "type": "url",
+        "value": "/generate"
+      }
+    },
+    {
+      "step_number": 2,
+      "action": "Select requirement 'Product Search'",
+      "expected": "Requirement 'Product Search' is selected",
+      "selector": "[data-testid='requirement-select']",
+      "action_type": "select",
+      "input_value": "Product Search",
+      "assertion": {
+        "type": "value",
+        "value": "Product Search"
+      }
+    },
+    {
+      "step_number": 3,
+      "action": "Select the Default Template",
+      "expected": "Default Template is selected",
+      "selector": "[data-testid='template-select']",
+      "action_type": "select",
+      "input_value": "Default Template",
+      "assertion": {
+        "type": "value",
+        "value": "Default Template"
+      }
+    },
+    {
+      "step_number": 4,
+      "action": "Click Generate Test Cases",
+      "expected": "Test cases are generated and displayed",
+      "selector": "[data-testid='generate-button']",
+      "action_type": "click",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid='test-cases-results']"
+      }
+    },
+    {
+      "step_number": 5,
+      "action": "Wait for the results to appear",
+      "expected": "Test cases results are visible",
+      "selector": "[data-testid='test-cases-results']",
+      "action_type": "wait",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid='test-cases-results']"
+      }
+    },
+    {
+      "step_number": 6,
+      "action": "Select the project 'E-Commerce Platform QA' from the save-to project dropdown",
+      "expected": "Project 'E-Commerce Platform QA' is selected as the save destination",
+      "selector": "[data-testid='project-select']",
+      "action_type": "select",
+      "input_value": "E-Commerce Platform QA",
+      "assertion": {
+        "type": "value",
+        "value": "E-Commerce Platform QA"
+      }
+    },
+    {
+      "step_number": 7,
+      "action": "Click the Save Test Cases button",
+      "expected": "Test cases are saved and a success notification appears",
+      "selector": "[data-testid='save-test-cases-button']",
+      "action_type": "click",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid='success-notification']"
+      }
+    },
+    {
+      "step_number": 8,
+      "action": "Verify the success notification message text",
+      "expected": "Notification confirms test cases were saved to the project",
+      "selector": "[data-testid='success-notification']",
+      "action_type": "wait",
+      "assertion": {
+        "type": "text",
+        "value": "Test cases saved successfully",
+        "target": "[data-testid='success-notification']"
+      }
+    }
+  ]
+}

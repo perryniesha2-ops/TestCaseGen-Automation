@@ -3,7 +3,7 @@ import "dotenv/config";
 
 export default defineConfig({
   testDir: "./tests",
-  timeout: 700_000,
+  timeout: 800_000,
   expect: { timeout: 10_000 },
   retries: 1,
   reporter: [

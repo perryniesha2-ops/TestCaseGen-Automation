@@ -1,0 +1,65 @@
+{
+  "id": "a6f3dd8f-673e-4daf-94c8-2528caffef7b",
+  "title": "Attempt Test Case Generation Without Selecting a Template",
+  "description": "Verify that submitting the form with a requirement selected but no template chosen triggers a specific error for the missing template field.",
+  "test_type": "functional",
+  "expected_result": "System shows a specific error only on the template field and does not generate any test cases. The requirement field shows no error since it was correctly selected.",
+  "test_steps": [
+    {
+      "step_number": 1,
+      "action": "Navigate to the test case generation page",
+      "expected": "Test case generation page is displayed",
+      "selector": "body",
+      "action_type": "navigate",
+      "input_value": "/generate",
+      "assertion": {
+        "type": "url",
+        "value": "/generate"
+      }
+    },
+    {
+      "step_number": 2,
+      "action": "Check the first available requirement checkbox",
+      "expected": "Requirement checkbox is checked",
+      "selector": "[data-testid=\"requirement-checkbox\"]:first-of-type",
+      "action_type": "check",
+      "assertion": {
+        "type": "checked"
+      }
+    },
+    {
+      "step_number": 3,
+      "action": "Leave the template selector empty and click Generate Test Cases",
+      "expected": "Form submission is blocked with a template field error",
+      "selector": "button[type=\"submit\"], [data-testid=\"generate-button\"]",
+      "action_type": "click",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid=\"template-error\"]"
+      }
+    },
+    {
+      "step_number": 4,
+      "action": "Verify the template error message text",
+      "expected": "Error reads 'Please select a template'",
+      "selector": "[data-testid=\"template-error\"]",
+      "action_type": "wait",
+      "assertion": {
+        "type": "text",
+        "value": "Please select a template",
+        "target": "[data-testid=\"template-error\"]"
+      }
+    },
+    {
+      "step_number": 5,
+      "action": "Confirm no requirement error is shown",
+      "expected": "Requirement field error is not visible",
+      "selector": "[data-testid=\"requirement-error\"]",
+      "action_type": "wait",
+      "assertion": {
+        "type": "hidden",
+        "target": "[data-testid=\"requirement-error\"]"
+      }
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "id": "2af97583-c196-430f-b41f-4eb8a2f96743",
+  "title": "Enter Excessively Long Text in Test Case Title Description Field",
+  "description": "Verify that entering a string exceeding the maximum allowed character limit in the test case title/description field triggers a character-limit error and prevents generation.",
+  "test_type": "functional",
+  "expected_result": "The system blocks form submission, shows a clear 'Description must not exceed 2000 characters' error, and the character counter indicates an exceeded state.",
+  "test_steps": [
+    {
+      "step_number": 1,
+      "action": "Navigate to the test case generation page",
+      "expected": "Test case generation page is displayed",
+      "selector": "body",
+      "action_type": "navigate",
+      "input_value": "/generate",
+      "assertion": {
+        "type": "url",
+        "value": "/generate"
+      }
+    },
+    {
+      "step_number": 2,
+      "action": "Fill the title/description override field with a 2001-character string",
+      "expected": "Overlong text is entered into the description field",
+      "selector": "[data-testid=\"description-override-field\"]",
+      "action_type": "fill",
+      "input_value": "",
+      "assertion": {
+        "type": "count",
+        "value": "2001"
+      }
+    },
+    {
+      "step_number": 3,
+      "action": "Click the Generate Test Cases button",
+      "expected": "Form submission is blocked and a character-limit error appears",
+      "selector": "[data-testid=\"generate-button\"]",
+      "action_type": "click",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid=\"error-message\"]"
+      }
+    },
+    {
+      "step_number": 4,
+      "action": "Verify the character limit error message",
+      "expected": "Error message indicates the maximum character limit has been exceeded",
+      "selector": "[data-testid=\"error-message\"]",
+      "action_type": "wait",
+      "assertion": {
+        "type": "text",
+        "value": "Description must not exceed 2000 characters",
+        "target": "[data-testid=\"error-message\"]"
+      }
+    },
+    {
+      "step_number": 5,
+      "action": "Confirm the character counter turns red or shows an exceeded state",
+      "expected": "Character counter reflects an over-limit state",
+      "selector": "[data-testid=\"character-counter\"]",
+      "action_type": "wait",
+      "assertion": {
+        "type": "attribute",
+        "value": "error",
+        "target": "[data-testid=\"character-counter\"]",
+        "attribute": "class"
+      }
+    }
+  ]
+}

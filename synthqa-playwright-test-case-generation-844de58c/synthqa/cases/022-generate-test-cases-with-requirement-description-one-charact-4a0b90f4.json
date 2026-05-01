@@ -1,0 +1,56 @@
+{
+  "id": "4a0b90f4-a87e-43a4-8e66-75a6142ba3f3",
+  "title": "Generate Test Cases with Requirement Description One Character Over Maximum Length",
+  "description": "Verifies that the system rejects or truncates a requirement description that is 501 characters — one character beyond the maximum allowed 500-character boundary — preventing invalid data from being processed.",
+  "test_type": "functional",
+  "expected_result": "The system enforces the 500-character maximum. Either the input field prevents the 501st character from being typed (HTML maxlength enforcement), or a visible validation error states 'Description cannot exceed 500 characters' and the Generate action is blocked. No test cases are generated with the over-limit content.",
+  "test_steps": [
+    {
+      "step_number": 1,
+      "action": "Navigate to the test case generation page",
+      "expected": "The test case generation page loads successfully",
+      "selector": "body",
+      "action_type": "navigate",
+      "input_value": "/generate",
+      "assertion": {
+        "type": "url",
+        "value": "/generate"
+      }
+    },
+    {
+      "step_number": 2,
+      "action": "Fill the requirement description with 501 characters (one over the maximum limit)",
+      "expected": "501 characters are typed; the field may truncate to 500 or show a validation error",
+      "selector": "[data-testid='requirement-description']",
+      "action_type": "fill",
+      "input_value": "",
+      "assertion": {
+        "type": "count",
+        "value": "501"
+      }
+    },
+    {
+      "step_number": 3,
+      "action": "Click the Generate Test Cases button",
+      "expected": "The system either blocks submission with a max-length error or auto-truncates to 500 characters",
+      "selector": "[data-testid='generate-button']",
+      "action_type": "click",
+      "assertion": {
+        "type": "visible",
+        "target": "[data-testid='validation-error']"
+      }
+    },
+    {
+      "step_number": 4,
+      "action": "Verify the error or truncation message is displayed",
+      "expected": "Message indicates the description exceeds the maximum character limit",
+      "selector": "[data-testid='validation-error']",
+      "action_type": "wait",
+      "assertion": {
+        "type": "text",
+        "value": "Description cannot exceed 500 characters",
+        "target": "[data-testid='validation-error']"
+      }
+    }
+  ]
+}
