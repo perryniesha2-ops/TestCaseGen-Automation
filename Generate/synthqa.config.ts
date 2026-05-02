@@ -40,34 +40,4 @@ export const testConfig: Record<string, { requires_auth: boolean }> = {
   "4a0b90f4-a87e-43a4-8e66-75a6142ba3f3": { requires_auth: true },
   // Generate Test Cases with Empty Requirements Selection (Zero Items in Collection)
   "a1ad53e9-a567-4e9f-9344-1ab87b5d5e9d": { requires_auth: true },
-  // Successfully Generate Test Cases With Valid Requirement and Default Template
-  "1f2ab8ef-efd5-476f-a7dd-9ca5ee74ee61": { requires_auth: true },
-  // User Selects Multiple Requirements and Generates a Combined Test Case Set
-  "b3e62225-e10b-4e0a-9ce5-7a10e35bc7d3": { requires_auth: true },
-  // Attempt Test Case Generation Without Selecting a Requirement
-  "1f05514c-2fbd-4607-b081-37a258425a7c": { requires_auth: true },
-  // Generate Test Cases with Single-Character Requirement Description (Min String Length)
-  "49502504-5a30-435e-9830-617a5396e0e9": { requires_auth: true },
-  // Attempt Test Case Generation Without Selecting a Template
-  "a6f3dd8f-673e-4daf-94c8-2528caffef7b": { requires_auth: true },
-  // Attempt Test Case Generation as a Read-Only User Without Generate Permission
-  "375069d5-64b2-454b-a808-dd563f932d2c": { requires_auth: true },
-  // Generate Test Cases with Requirement Description One Character Over Maximum Length
-  "4a0b90f4-a87e-43a4-8e66-75a6142ba3f3": { requires_auth: true },
-  // Generate Test Cases with Empty Requirements Selection (Zero Items in Collection)
-  "a1ad53e9-a567-4e9f-9344-1ab87b5d5e9d": { requires_auth: true },
-  // Generate Test Cases with Requirement Description at Exact Maximum Allowed Length
-  "3a218b43-bbd4-434b-a9bd-840ca7eee751": { requires_auth: true },
-  // Generate Test Cases with Empty Requirement Description (Below Minimum String Length)
-  "b6bf300a-dcd8-4e68-8a11-583476ede9db": { requires_auth: true },
-  // Generate Test Cases Using a Custom Template and Verify Structured Output Format
-  "c46a7f41-faed-4a90-9fb9-622e3ec7d89a": { requires_auth: true },
-  // Enter Excessively Long Text in Test Case Title Description Field
-  "2af97583-c196-430f-b41f-4eb8a2f96743": { requires_auth: true },
-  // Submit Test Case Generation Form With All Required Fields Empty
-  "0db77719-abdb-4dd8-bf0c-04fd2b2be4e6": { requires_auth: true },
-  // Export Generated Test Cases to CSV Format Successfully
-  "884ce9c9-d449-4a43-b929-e8b6fe393ed5": { requires_auth: true },
-  // Save Generated Test Cases to the Project Repository
-  "edadc9e0-fb8a-4111-b049-a96116360777": { requires_auth: true },
 };
